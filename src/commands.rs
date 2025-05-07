@@ -46,6 +46,7 @@ pub(crate) async fn check<R: Runtime>(
     timeout: Option<u64>,
     proxy: Option<String>,
     target: Option<String>,
+    endpoints: Option<Vec<String>>,
 ) -> Result<Option<Metadata>> {
     let mut builder = webview.updater_builder();
     if let Some(headers) = headers {
@@ -62,6 +63,13 @@ pub(crate) async fn check<R: Runtime>(
     }
     if let Some(target) = target {
         builder = builder.target(target);
+    }
+    if let Some(endpoints) = endpoints {
+        let urls = endpoints
+            .into_iter()
+            .map(|e| Url::parse(&e).map_err(Into::into))
+            .collect::<Result<Vec<_>>>()?;
+        builder = builder.endpoints(urls)?;
     }
 
     let updater = builder.build()?;

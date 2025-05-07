@@ -17,6 +17,10 @@ interface CheckOptions {
      * Target identifier for the running application. This is sent to the backend.
      */
     target?: string;
+    /**
+     * The update channel to check for.
+     */
+    endpoints?: string[];
 }
 /** Options used when downloading an update */
 interface DownloadOptions {
